@@ -1,0 +1,89 @@
+rules:
+  - id: js-innerhtml-xss
+    languages: [javascript]
+    message: "(CWE-79)"
+    severity: ERROR
+    patterns:
+      - pattern: $OBJ.innerHTML = $VAL
+  
+  - id: js-eval-usage
+    languages: [javascript]
+    message: "(CWE-94/98)"
+    severity: ERROR
+    patterns:
+      - pattern: eval(...)
+  
+  - id: js-document-write-xss
+    languages: [javascript]
+    message: "(CWE-79)"
+    severity: WARNING
+    patterns:
+      - pattern: document.write(...)
+  
+  - id: log-secret
+    languages: [javascript]
+    message: "(CWE-532)"
+    severity: WARNING
+    patterns:
+      - pattern: console.log($VAR)
+      - metavariable-regex:
+          metavariable: $VAR
+          regex: ".*(secret|password|token|key|api).*"
+  
+  - id: child-process-exec
+    languages: [javascript]
+    message: "(CWE-78)"
+    severity: ERROR
+    patterns:
+      - pattern: require('child_process').exec($CMD)
+      - pattern: require("child_process").exec($CMD)
+  
+  - id: empty-catch
+    languages: [javascript]
+    message: "(CWE-252)"
+    severity: WARNING
+    patterns:
+      - pattern: |
+          try { ... } catch (e) {}
+  
+  - id: insecure-md5-sha1
+    languages: [javascript]
+    message: "(CWE-326)"
+    severity: WARNING
+    patterns:
+      - pattern: crypto.createHash("md5")
+      - pattern: crypto.createHash("sha1")
+  
+  - id: fs-writefile
+    languages: [javascript]
+    message: "(CWE-269)"
+    severity: WARNING
+    patterns:
+      - pattern: require('fs').writeFile($PATH, $DATA, ...)
+      - pattern: require("fs").writeFile($PATH, $DATA, ...)
+  
+  - id: js-sql-injection
+    languages: [javascript]
+    message: "(CWE-89)"
+    severity: WARNING
+    patterns:
+      - pattern: $DB.query("..." + $USER_INPUT + "...")
+      - pattern: $DB.execute("..." + $USER_INPUT + "...")
+  
+  - id: open-redirect
+    languages: [javascript]
+    message: "(CWE-601)"
+    severity: ERROR
+    patterns:
+      - pattern: res.redirect($URL)
+      - pattern: response.redirect($URL)
+  
+  - id: missing-csrf-protection
+    languages: [javascript]
+    message: "(CWE-352)"
+    severity: WARNING
+    patterns:
+      - pattern: app.use($MIDDLEWARE)
+      - metavariable-regex:
+          metavariable: $MIDDLEWARE
+          regex: "((?!csurf).)*$"
