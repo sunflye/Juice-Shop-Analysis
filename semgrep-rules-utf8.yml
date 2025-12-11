@@ -87,3 +87,33 @@ rules:
       - metavariable-regex:
           metavariable: $MIDDLEWARE
           regex: "((?!csurf).)*$"
+
+  - id: possible-idor-basket
+    languages: [javascript, typescript]
+    message: "(CWE-639) Possible IDOR: BasketId или id берётся напрямую из пользовательского input для записи/поиска"
+    severity: WARNING
+    patterns:
+      - pattern-either:
+          - pattern: |
+              const $B = $REQ.body.BasketId
+          - pattern: |
+              let $B = $REQ.body.BasketId
+          - pattern: |
+              var $B = $REQ.body.BasketId
+          - pattern: |
+              const $B = $REQ.body.id
+          - pattern: |
+              let $B = $REQ.body.id
+          - pattern: |
+              var $B = $REQ.body.id
+          - pattern: |
+              const $B = $REQ.query.BasketId
+          - pattern: |
+              const $B = $REQ.query.id
+          # Вложенный usage:
+          - pattern: |
+              $MODEL.findAll({ where: { BasketId: $REQ.body.BasketId } })
+          - pattern: |
+              $MODEL.findAll({ where: { BasketId: $REQ.body.id } })
+          - pattern: |
+              $MODEL.findAll({ where: { id: $REQ.query.id } })

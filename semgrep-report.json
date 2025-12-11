@@ -531,6 +531,29 @@
             }
         },
         {
+            "check_id": "Juice-Shop-Analysis.possible-idor-basket",
+            "path": "juice-shop\\routes\\likeProductReviews.ts",
+            "start": {
+                "line": 18,
+                "col": 5,
+                "offset": 649
+            },
+            "end": {
+                "line": 18,
+                "col": 27,
+                "offset": 671
+            },
+            "extra": {
+                "message": "(CWE-639) Possible IDOR: BasketId или id берётся напрямую из пользовательского input для записи/поиска",
+                "metadata": {},
+                "severity": "WARNING",
+                "fingerprint": "requires login",
+                "lines": "requires login",
+                "validation_state": "NO_VALIDATOR",
+                "engine_kind": "OSS"
+            }
+        },
+        {
             "check_id": "Juice-Shop-Analysis.js-eval-usage",
             "path": "juice-shop\\routes\\userProfile.ts",
             "start": {
@@ -1903,12 +1926,12 @@
     },
     "time": {
         "rules": [],
-        "rules_parse_time": 0.12514472007751465,
+        "rules_parse_time": 0.10094165802001953,
         "profiling_times": {
-            "config_time": 0.25104379653930664,
-            "core_time": 4.742530584335327,
-            "ignores_time": 6.079673767089844e-005,
-            "total_time": 4.994156837463379
+            "config_time": 0.16986823081970215,
+            "core_time": 3.58203387260437,
+            "ignores_time": 4.4345855712890625e-005,
+            "total_time": 3.7522950172424316
         },
         "parsing_time": {
             "total_time": 0.0,
@@ -1923,19 +1946,19 @@
             "very_slow_files": []
         },
         "scanning_time": {
-            "total_time": 15.076411247253418,
+            "total_time": 10.73381495475769,
             "per_file_time": {
-                "mean": 0.031149610014986402,
-                "std_dev": 0.020578131555020276
+                "mean": 0.022177303625532448,
+                "std_dev": 0.011763575684085804
             },
             "very_slow_stats": {
-                "time_ratio": 0.2040910474779083,
+                "time_ratio": 0.21789397155982035,
                 "count_ratio": 0.002066115702479339
             },
             "very_slow_files": [
                 {
                     "fpath": "juice-shop\\frontend\\src\\assets\\private\\three.js",
-                    "ftime": 3.076960563659668
+                    "ftime": 2.3388335704803467
                 }
             ]
         },
@@ -1969,12 +1992,12 @@
             "file_level_time": 0.0,
             "rules_with_project_prefilters_ratio": 0.0,
             "rules_with_file_prefilters_ratio": 1.0,
-            "rules_selected_ratio": 0.1338166144200627,
-            "rules_matched_ratio": 0.1338166144200627
+            "rules_selected_ratio": 0.13882902298850575,
+            "rules_matched_ratio": 0.13882902298850575
         },
         "targets": [],
         "total_bytes": 0,
-        "max_memory_bytes": 1540108736
+        "max_memory_bytes": 1520683520
     },
     "engine_requested": "OSS",
     "skipped_rules": [],
