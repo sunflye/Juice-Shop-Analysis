@@ -1,0 +1,96 @@
+1. Развёртывание среды
+----------------------
+1.1. Запуск Juice Shop:
+    docker compose up -d juice-shop
+
+1.2. Запуск контейнера атакующего:
+    docker compose run attacker bash
+
+2. Проверка уязвимостей
+------------------------
+2.1. Semgrep запускается локально на исходном коде Juice Shop.
+2.2. Найденные уязвимости классифицируются (CWE).
+
+3. PoC тестирование
+-------------------
+3.1. Каждый PoC выполняется вручную:
+    docker compose run attacker python exploit_jwt.py
+    docker compose run attacker python exploit_xss.py
+    docker compose run attacker python exploit_eval.py
+
+4. Изоляция
+-----------
+4.1. Все атаки выполняются строго внутри Docker-окружения.
+4.2. Жертва и атакующий отделены логически и сетево.
+
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Диаграмма
+
+На сайт https://mermaid.live вставить текст:
+
+flowchart LR
+    subgraph Host["Host System"]
+        direction TB
+        Compose["docker-compose.yml"]
+    end
+
+    subgraph DockerNetwork["Docker Virtual Environment"]
+        direction LR
+
+        Juice["Juice Shop
+        (vulnerable web app)
+        Port 3000"]
+        Attacker["Attacker Container
+        (Python environment)"]
+    end
+
+    Compose --> DockerNetwork
+    Juice <-->|HTTP Requests| Attacker
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+Защита от связанных уязвимостей (CWE-798 Hardcoded Secrets)
+✔ Никогда не хранить секреты в исходном коде
+Использовать:
+environment variables
+Docker secrets
+HashiCorp Vault
+AWS Secrets Manager
+✔ Регулярная ротация ключей
+Минимизирует ущерб от компрометации.
+✔ Использование длинных, криптографически стойких ключей
+Минимум 256 бит.
+✔ Ограничение срока действия токенов (short-lived JWT)
+Снижает риски перехвата.
+
+Защита от связанных уязвимостей (CWE-798 Hardcoded Secrets)
+✔ Никогда не хранить секре��ы в исходном коде
+Использовать:
+environment variables
+Docker secrets
+HashiCorp Vault
+AWS Secrets Manager
+✔ Регулярная ротация ключей
+Минимизирует ущерб от компрометации.
+✔ Использование длинных, криптографически стойких ключей
+Минимум 256 бит.
+✔ Ограничение срока действия токенов (short-lived JWT)
+Снижает риски перехвата.
+
+Защита от XSS (CWE-79)
+✔ Экранирование вывода (output encoding)
+Использовать:
+DOMPurify
+Angular sanitization
+React auto-escape
+✔ CSP (Content Security Policy)
+Особенно:
+default-src 'self'
+script-src 'self'
+запрет inline-скриптов
+✔ Input validation (хотя это не основная защита)
+Запрет HTML-тегов там, где они не нужны.
+✔ HttpOnly cookies
+Чтобы запретить доступ JS к сессионным токенам.

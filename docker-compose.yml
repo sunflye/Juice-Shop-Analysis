@@ -1,7 +1,17 @@
-version: '3.7'
+version: '3.8'
+
 services:
   juice-shop:
-    image: bkimminich/juice-shop:latest
+    image: bkimminich/juice-shop
+    container_name: juice-shop
+    restart: unless-stopped
     ports:
       - "3000:3000"
-    restart: unless-stopped
+
+  attacker:
+    build: ./attacker
+    container_name: attacker
+    depends_on:
+      - juice-shop
+    working_dir: /app
+    tty: true
