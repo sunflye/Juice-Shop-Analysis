@@ -1,17 +1,25 @@
 version: '3.8'
 
 services:
-  juice-shop:
-    image: bkimminich/juice-shop
-    container_name: juice-shop
-    restart: unless-stopped
+  juice-shop: 
+    image: bkimminich/juice-shop:latest
+    container_name: juice-shop-vulnerable
     ports:
       - "3000:3000"
-
+    networks:
+      - attack-network
   attacker:
-    build: ./attacker
-    container_name: attacker
+    build:  ./attacker
+    container_name: attacker-container
     depends_on:
       - juice-shop
-    working_dir: /app
+    networks: 
+      - attack-network
+    environment:
+      - TARGET_URL=http://juice-shop:3000
+    stdin_open: true
     tty: true
+
+networks:
+  attack-network: 
+    driver: bridge
