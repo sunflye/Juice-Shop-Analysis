@@ -137,10 +137,6 @@ docker compose run attacker python exploit_sqli.py
 docker compose run attacker python exploit_path_traversal.py
 ```
 
-- Before exploit IDOR you should create a new user. To do that go to http://localhost:3000 and use the following credentials:
-    - email — `user@juice-sh.op`
-    - password — `user123`
-
 - Exploit **IDOR** (`CWE-639`).
 ```
 docker compose run attacker python exploit_idor_basket.py
