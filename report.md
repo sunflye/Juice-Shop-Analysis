@@ -4,22 +4,22 @@
 
 ## Goal
 
-Statically analyse vulnerable Juice Shop web application with semgrep tool. Deploy the environment and exploit some found vulnerabilities, suggest possible fixes.
+Statically analyse vulnerable Juice Shop web application with `semgrep` tool. Deploy the environment and exploit three found vulnerabilities, suggest possible fixes.
 
-## Team (Group CSE-01) responsibilities:
+## Team (CBS-01) responsibilities
 1. Polina Kostikova (p.kostikova@innopolis.university) — prepared the environment and implemented exploit scripts
-2. Sofia Palkina (s.palkina@innopolis.university) — wrote this report and suggested fixes
-3. Amir Bairamov (a.bairamov@innopolis.university) — wrote this report and prepared the environment
+2. Sofia Palkina (s.palkina@innopolis.university) — wrote this report and  proposed defense mechanisms
+3. Amir Bairamov (a.bairamov@innopolis.university) — wrote this report, prepared the environment and recorded a demo video
 
 ## Attack surface and scenarios description
 
 [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) is probably the most modern and sophisticated insecure web application. It encompasses vulnerabilities from the entire OWASP Top Ten along with many other security flaws found in real-world applications.
 
 **Scenario:**
-- **Launch** the `Juice Shop`.
+- **Launch** the `Juice Shop Web Application`.
 - **Learn** as much as possible about it's vulnerabilities by using `semgrep`.
-- **Exploit** 3 vulnerabilities, using the provided example payloads.
-- **Suggest** possible fixes
+- **Exploit** 3 vulnerabilities.
+- **Suggest** defense mechanisms.
 
 **Schema:**
 
@@ -43,25 +43,25 @@ git clone https://github.com/sunflye/Juice-Shop-Analysis.git
 cd Juice-Shop-Analysis
 ```
 
-- Start the vulnerable Juice Shop container with
+- Start the vulnerable Juice Shop container 
 ```
 docker compose up -d juice-shop
 ```
-- Build the attacker container with
+- Build the attacker container
 ```
 docker compose build attacker
 ```
 
-## Finding vulnerabilities
+## Detection of Vulnerabilities
 
-First, find the most important vulnerabilities in the `Juice Shop` source code. Run the `semgrep` tool on it.
+First, find vulnerabilities in the `Juice Shop` source code. Run the `semgrep` tool on it.
 
 
 To identify vulnerabilities in the Juice Shop source code, we used two approaches with Semgrep:
 
 ### 1. Custom Semgrep Rules
 
-First, we created a custom rules file (`semgrep-rules-utf8.yml`) to focus on the most critical vulnerabilities that we wanted to find. The custom rules targeted:
+First, we created a custom rules file `semgrep-rules-utf8.yml` to focus on the vulnerabilities that we wanted to find. The custom rules targeted:
 
 - XSS via `innerHTML` and `document.write` (CWE-79)
 - Usage of `eval` (CWE-94/98)
@@ -82,7 +82,7 @@ By combining focused custom rules and the broader official ruleset, we ensured b
 ### 3. Steps to discover vulnerabilities
 - Clone the official Juice Shop repository to obtain the source code for analysis:
   ```sh
-  git clone https://github.com/bkimminich/juice-shop.git
+  git clone https://github.com/juice-shop/juice-shop.git
   ```
   *(Create a `juice-shop` folder next to your analysis project folder)*
 
@@ -96,7 +96,7 @@ By combining focused custom rules and the broader official ruleset, we ensured b
   semgrep --config "p/javascript" --json --output Juice-Shop-Analysis/semgrep-js-report2.json ./juice-shop
   ```
 
-- Review the generated JSON reports in the `Juice-Shop-Analysis` folder to identify and prioritize vulnerabilities for exploitation.
+- Review the generated JSON reports (`semgrep-js-report.json` and `semgrep-js-report2.json`) in the `Juice-Shop-Analysis` folder to identify and prioritize vulnerabilities for exploitation (report are already in the repository).
 
 
 ## Vulnerabilities description
