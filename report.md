@@ -2,6 +2,8 @@
 
 **Link to the GitHub** — https://github.com/sunflye/Juice-Shop-Analysis 
 
+**Link to the demo video** —
+
 ## Goal
 
 Statically analyse vulnerable Juice Shop web application with `semgrep` tool. Deploy the environment and exploit three found vulnerabilities, suggest possible fixes.
