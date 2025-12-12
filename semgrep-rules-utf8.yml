@@ -30,54 +30,6 @@ rules:
           metavariable: $VAR
           regex: ".*(secret|password|token|key|api).*"
   
-  - id: child-process-exec
-    languages: [javascript]
-    message: "(CWE-78)"
-    severity: ERROR
-    patterns:
-      - pattern: require('child_process').exec($CMD)
-      - pattern: require("child_process").exec($CMD)
-  
-  - id: empty-catch
-    languages: [javascript]
-    message: "(CWE-252)"
-    severity: WARNING
-    patterns:
-      - pattern: |
-          try { ... } catch (e) {}
-  
-  - id: insecure-md5-sha1
-    languages: [javascript]
-    message: "(CWE-326)"
-    severity: WARNING
-    patterns:
-      - pattern: crypto.createHash("md5")
-      - pattern: crypto.createHash("sha1")
-  
-  - id: fs-writefile
-    languages: [javascript]
-    message: "(CWE-269)"
-    severity: WARNING
-    patterns:
-      - pattern: require('fs').writeFile($PATH, $DATA, ...)
-      - pattern: require("fs").writeFile($PATH, $DATA, ...)
-  
-  - id: js-sql-injection
-    languages: [javascript]
-    message: "(CWE-89)"
-    severity: WARNING
-    patterns:
-      - pattern: $DB.query("..." + $USER_INPUT + "...")
-      - pattern: $DB.execute("..." + $USER_INPUT + "...")
-  
-  - id: open-redirect
-    languages: [javascript]
-    message: "(CWE-601)"
-    severity: ERROR
-    patterns:
-      - pattern: res.redirect($URL)
-      - pattern: response.redirect($URL)
-  
   - id: missing-csrf-protection
     languages: [javascript]
     message: "(CWE-352)"
@@ -90,7 +42,7 @@ rules:
 
   - id: possible-idor-basket
     languages: [javascript, typescript]
-    message: "(CWE-639) Possible IDOR: BasketId или id берётся напрямую из пользовательского input для записи/поиска"
+    message: "(CWE-639) Possible IDOR"
     severity: WARNING
     patterns:
       - pattern-either:
@@ -110,7 +62,6 @@ rules:
               const $B = $REQ.query.BasketId
           - pattern: |
               const $B = $REQ.query.id
-          # Вложенный usage:
           - pattern: |
               $MODEL.findAll({ where: { BasketId: $REQ.body.BasketId } })
           - pattern: |

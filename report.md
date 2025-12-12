@@ -6,10 +6,10 @@
 
 Statically analyse vulnerable Juice Shop web application with semgrep tool. Deploy the environment and exploit some found vulnerabilities, suggest possible fixes.
 
-## Team (Group: CSE-01):
-1. Polina Kostikova (p.kostikova@innopolis.university) — do environment preparation and create exploites
-2. Sofia Palkina (s.palkina@innopolis.university) — write this report and suggest fixes
-3. Amir Bairamov (a.bairamov@innopolis.university) — write this report and do environment preparation 
+## Team (Group CSE-01) responsibilities:
+1. Polina Kostikova (p.kostikova@innopolis.university) — prepared the environment and implemented exploit scripts
+2. Sofia Palkina (s.palkina@innopolis.university) — wrote this report and suggested fixes
+3. Amir Bairamov (a.bairamov@innopolis.university) — wrote this report and prepared the environment
 
 ## Attack surface and scenarios description
 
@@ -79,10 +79,51 @@ docker-compose up -d
 
 ## Exploits steps
 
-- First, find the most important vulnerabilities in the `Juice Shop` source code. Run the `semgrep` tool on it.
-```
-???
-```
+First, find the most important vulnerabilities in the `Juice Shop` source code. Run the `semgrep` tool on it.
+
+
+To identify vulnerabilities in the Juice Shop source code, we used two approaches with Semgrep:
+
+### 1. Custom Semgrep Rules
+
+First, we created a custom rules file (`semgrep-rules-utf8.yml`) to focus on the most critical vulnerabilities that we wanted to find. The custom rules targeted:
+
+- XSS via `innerHTML` and `document.write` (CWE-79)
+- Usage of `eval` (CWE-94/98)
+- Logging of secrets, passwords, tokens, or keys (CWE-532)
+- Missing CSRF protection (CWE-352)
+- Possible IDOR in basket operations (CWE-639)
+
+### 2. Official Semgrep Rules
+
+Next, we decided to run Semgrep with the official JavaScript ruleset (`p/javascript`) to discover additional vulnerabilities that have been missed by our custom rules. This provided a broader view of the application's security posture.
+
+---
+By combining focused custom rules and the broader official ruleset, we ensured both targeted and comprehensive vulnerability discovery in the Juice Shop application.
+ 
+**Note:** The Juice Shop repository was cloned into a folder (`juice-shop`) located next to our analysis project folder (`Juice-Shop-Analysis`). All Semgrep scans were run from the parent directory, specifying the source code folder as `juice-shop` and saving reports into the `Juice-Shop-Analysis` directory.
+
+---
+
+
+### 3. Steps to discover vulnerabilities
+- Clone the official Juice Shop repository to obtain the source code for analysis:
+  ```sh
+  git clone https://github.com/bkimminich/juice-shop.git
+  ```
+  *(Create a `juice-shop` folder next to your analysis project folder)*
+
+- Run Semgrep with custom rules on the Juice Shop source code and save the results to a report (run this command from the parent directory, not from inside `Juice-Shop-Analysis`):
+  ```sh
+  semgrep --config Juice-Shop-Analysis/semgrep-rules-utf8.yml --json --output Juice-Shop-Analysis/semgrep-report.json ./juice-shop
+  ```
+
+- Then run Semgrep with the official JavaScript rules to identify more vulnerabilities:
+  ```sh
+  semgrep --config "p/javascript" --json --output Juice-Shop-Analysis/semgrep-js-report2.json ./juice-shop
+  ```
+
+- Review the generated JSON reports in the `Juice-Shop-Analysis` folder to identify and prioritize vulnerabilities for exploitation.
 
 On this step you can choose any of the found vulnerabilities. We will continue the attack only with 3 of them: CWE-89, CWE-73, CWE-639.
 
@@ -161,8 +202,16 @@ Below are the defense mechanisms for three SWEs for which we have written exploi
 
 
 ## Difficulties faced, new skills
+There were several challenges that prevented some exploits from working as intended:
 
-...
+- Some exploits did not work because the relevant vulnerabilities were either already fixed or not present in the current version of Juice Shop.
+- In certain cases, the server would return a 401/403 error or an empty response, even though documentation or code suggested a possible vulnerability.
+- Some exploits failed due to incorrect request formats, invalid parameters, or missing/incorrect authorization tokens.
+- A number of PoC scripts required manual adjustments and reworking to match the actual business logic or API structure of the application.
+
+As a result, not all planned exploits were successful, but three exploitations were successfully demonstrated.
+
+---
 
 Throughout the project, we gained practical experience in several key areas of cybersecurity. We learned how to **use Semgrep effectively** for static code analysis. Writing and executing exploit scripts deepened our knowledge of vulnerability exploitation techniques, including **attack automation**. Additionally, we developed the ability to analyze exploit outcomes and translate them into actionable security recommendations.
 
