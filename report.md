@@ -69,12 +69,13 @@ git clone https://github.com/sunflye/Juice-Shop-Analysis.git
 cd Juice-Shop-Analysis
 ```
 
-- Launch the `attack-network` and wait for the containers to be ready.
+- Start the vulnerable Juice Shop container with
 ```
-docker-compose up -d
-
-# Or in some cases:
-# docker compose up -d
+docker compose up -d juice-shop
+```
+- Build the attacker container with
+```
+docker compose build attacker
 ```
 
 ## Exploits steps
@@ -197,7 +198,7 @@ Below are the defense mechanisms for three SWEs for which we have written exploi
     Instead of exposing predictable, sequential database IDs (1, 2, 3...) in API parameters, use random, non-guessable identifiers (UUIDs) or encrypted/obfuscated tokens. This makes large-scale IDOR enumeration significantly harder, though it is not a substitute for server-side checks (1-2 mechanisms).
 
 
-## Difficulties faced, new skills
+## Difficulties faced, new skills acquired during the project
 There were several challenges that prevented some exploits from working as intended:
 
 - Some exploits did not work because the relevant vulnerabilities were either already fixed or not present in the current version of Juice Shop.
